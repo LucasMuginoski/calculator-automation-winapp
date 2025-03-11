@@ -6,6 +6,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 public class Calculator {
 
@@ -47,6 +48,7 @@ public class Calculator {
         calcsession.findElementByName("Nove").click();
         calcsession.findElementByName("Igual a").click();
         Assert.assertEquals(getDisplayResult(), "21");
+
     }
 
     @Test
@@ -84,5 +86,43 @@ public class Calculator {
     public String getDisplayResult(){
         calcresult = calcsession.findElementByAccessibilityId("CalculatorResults");
         return calcresult.getText().replace("A exibição é", "").trim();
+    }
+    public void chooseCalculator(String locator){
+        System.out.println(locator);
+        calcsession.findElementByAccessibilityId("TogglePaneButton").click();
+        List <WebElement> listOfElements = calcsession.findElementsByClassName("Microsoft.UI.Xaml.Controls.NavigationViewItem");
+        System.out.println(listOfElements.size());
+        for(int i=0; i < listOfElements.size(); i++){
+            if (listOfElements.get(i).getAttribute("Name").equals(locator)){
+                listOfElements.get(i).click();
+                break;
+            }
+
+        }
+    }
+
+    @Test
+    public void selectAnotherCalculator(){
+        System.out.println("Selecting another calculator");
+        chooseCalculator("Científica Calculadora");
+    }
+
+    public void chooseCalculatorByXPath(String locator){
+        System.out.println(locator);
+        calcsession.findElementByAccessibilityId("TogglePaneButton").click();
+        List <WebElement> listOfElements = calcsession.findElementsByXPath("//ListItem");
+        System.out.println(listOfElements.size());
+        for(int i=0; i < listOfElements.size(); i++){
+            if (listOfElements.get(i).getAttribute("Name").equals(locator)){
+                listOfElements.get(i).click();
+                break;
+            }
+
+        }
+    }
+    @Test
+    public void selectAnotherCalculatorXpath(){
+        System.out.println("Selecting another calculator");
+        chooseCalculatorByXPath("Científica Calculadora");
     }
 }
